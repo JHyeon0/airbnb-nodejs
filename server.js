@@ -1,17 +1,17 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+require('dotenv').config();
+const { PORT } = process.env;
+const http = require('http');
+const app = require('./app');
+const server = http.createServer(app);
+const prisma = require('./prisma');
 
-const app = express();
-app.use(bodyParser.json());
-
-const PORT = 8000;
-
-const startServer = async () => {
+const start = async () => {
   try {
-    app.listen(PORT, () => console.log(`Server is listening on ${PORT}.`));
+    server.listen(PORT, () => console.log(`Server is listening on ${PORT}.`));
   } catch (err) {
     console.error(err);
+    await prisma.$disconnect();
   }
 };
 
-startServer();
+start();

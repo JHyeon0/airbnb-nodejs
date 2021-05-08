@@ -1,0 +1,34 @@
+{
+  "name": "airbnb-backend",
+  "version": "1.0.0",
+  "description": "node server with express, prisma, MySQL",
+  "main": "server.js",
+  "keywords": [
+    "nodejs",
+    "express",
+    "prisma",
+    "MySQL",
+    "RESTfulAPI"
+  ],
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "soheon-lee",
+  "contributors": [
+    "JHyeon0"
+  ],
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "eslint": "^7.26.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1"
+  },
+  "devDependencies": {
+    "bcryptjs": "^2.4.3",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "prisma": "^2.22.1"
+  }
+}

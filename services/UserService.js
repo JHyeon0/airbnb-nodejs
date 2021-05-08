@@ -1,19 +1,27 @@
-const prisma = require('../prisma'); // Service 로직은 오직 Model(=Prisma) 에만 의존합니다.
+const prisma = require('../prisma'); // Service 로직은 오직 Model(=Prisma)에만 의존합니다.
 
-// const createUser = (fields) => {
-//   const data = makeDataForCreate(fields);
-//   return prisma.users.create({ data });
-// };
+const createUser = (field) => {
+  return prisma.user.create({ data: field });
+};
 
-const findUser = (field) => {
+const findUser = (field, selectFieldsArr) => {
   const [uniqueKey] = Object.keys(field);
+  const selectFields =
+    selectFieldsArr?.length &&
+    selectFieldsArr?.reduce((acc, field) => {
+      return { ...acc, [field]: true };
+    }, {});
 
   const isKeyId = uniqueKey === 'id';
   const value = isKeyId ? Number(field[uniqueKey]) : field[uniqueKey];
 
-  return prisma.users.findOne({ where: { [uniqueKey]: value } });
+  return prisma.user.findUnique({
+    where: { [uniqueKey]: value },
+    select: selectFields,
+  });
 };
 
 module.exports = {
   findUser,
+  createUser,
 };

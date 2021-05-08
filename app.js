@@ -6,7 +6,7 @@ const app = express();
 
 app.use(express.json());
 app.use(logger);
-app.use(routes); // Route 에 의존성을 가집니다.
+app.use(routes);
 
 app.use((err, req, res, next) => {
   const { status, message } = err;

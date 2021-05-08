@@ -25,10 +25,14 @@
     "prettier": "^2.2.1"
   },
   "devDependencies": {
+    "@prisma/client": "^2.22.1",
+    "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^9.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
     "prisma": "^2.22.1"
   }
 }

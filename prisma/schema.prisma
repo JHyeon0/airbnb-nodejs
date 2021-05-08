@@ -7,11 +7,13 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["selectRelationCount"]
 }
 
 model User {
   id               Int                @id @default(autoincrement())
+  username         String
   email            String             @unique
   password         String
   phoneNumber      String
@@ -52,21 +54,71 @@ model LanguagesOnUsers {
 }
 
 model Place {
-  id               Int           @id @default(autoincrement())
-  title            String
-  host             Host          @relation(fields: [hostId], references: [id])
-  hostId           Int
-  pricePerDay      Decimal
-  description      String?
-  rules            Json?
-  conveniences     Json?
-  beds             Json?
-  locationLatitude Decimal?
-  locationLogitude Decimal?
-  placeImage       PlaceImage[]
-  review           Review[]
-  createdAt        DateTime      @default(now())
-  reservation      Reservation[]
+  id                Int           @id @default(autoincrement())
+  title             String
+  host              Host          @relation(fields: [hostId], references: [id])
+  hostId            Int
+  pricePerDay       Decimal
+  description       String?
+  rules             Json?
+  conveniences      Json?
+  beds              Json?
+  locationLatitude  Decimal?
+  locationLogitude  Decimal?
+  placeImage        PlaceImage[]
+  review            Review[]
+  createdAt         DateTime      @default(now())
+  reservation       Reservation[]
+  placeType         PlaceType?    @relation(fields: [placeTypeId], references: [id])
+  placeTypeId       Int?
+  hostingType       HostingType?  @relation(fields: [hostingTypeId], references: [id])
+  hostingTypeId     Int?
+  isOnlyForGuest    Boolean?
+  maximumGuests     Int?
+  bathrooms         Int?
+  availableCheckIn  DateTime?
+  availableCheckout DateTime?
+  basicFee          Decimal?
+  minimumFee        Decimal?
+  maximumFee        Decimal?
+  currency          Currency      @relation(fields: [currencyId], references: [id])
+  currencyId        Int
+}
+
+model Currency {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Place Place[]
+}
+
+model PlaceType {
+  id                   Int                @id @default(autoincrement())
+  name                 String
+  description          String
+  place                Place[]
+  buildingDetailType   BuildingDetailType @relation(fields: [buildingDetailTypeId], references: [id])
+  buildingDetailTypeId Int
+}
+
+model BuildingDetailType {
+  id             Int          @id @default(autoincrement())
+  name           String
+  PlaceType      PlaceType[]
+  buildingType   BuildingType @relation(fields: [buildingTypeId], references: [id])
+  buildingTypeId Int
+}
+
+model BuildingType {
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  BuildingDetailType BuildingDetailType[]
+}
+
+model HostingType {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  Place       Place[]
 }
 
 model PlaceImage {

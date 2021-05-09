@@ -6,6 +6,20 @@ const makeReservation = async (fields) => {
   });
 };
 
+const getHostReservations = async (hostId) => {
+  const targetReservations = await prisma.place.findMany({
+    where: { hostId },
+    select: {
+      id: true,
+      title: true,
+      reservation: true,
+    },
+  });
+
+  return targetReservations;
+};
+
 module.exports = {
   makeReservation,
+  getHostReservations,
 };

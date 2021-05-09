@@ -1,5 +1,6 @@
-const validateToken = require('./validateToken');
+const { validateUser, validateHost } = require('./validateToken');
 
 module.exports = {
-  validateToken,
+  validateUser,
+  validateHost,
 };

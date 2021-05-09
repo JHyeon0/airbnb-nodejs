@@ -43,7 +43,7 @@ const findOnePlace = (placeId) => {
       rules: true,
       host: {
         select: {
-          user: { select: { username: true } },
+          user: { select: { id: true, username: true } },
         },
       },
       placeImage: { select: { id: true, imageUrl: true } },
@@ -67,8 +67,18 @@ const findOnePlaceDetail = (placeId) => {
   });
 };
 
+const updatePlace = (placeId, data) => {
+  return prisma.place.update({
+    where: {
+      id: placeId,
+    },
+    data,
+  });
+};
+
 module.exports = {
   findPlace,
   findOnePlace,
   findOnePlaceDetail,
+  updatePlace,
 };

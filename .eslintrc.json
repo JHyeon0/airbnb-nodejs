@@ -1,11 +1,15 @@
 {
-  "extends": ["prettier"],
+  "extends": ["prettier", "eslin:recommended"],
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": ["error"]
   },
   "parserOptions": {
-    "ecmaVersion": 2017
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+    }
   },
 
   "env": {

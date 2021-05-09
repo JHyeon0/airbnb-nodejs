@@ -4,7 +4,10 @@ const jwt = require('jsonwebtoken');
 
 const validateUser = async (req, res, next) => {
   try {
-    if (req.headers.authorization.split(' ').length !== 2)
+    if (!req.headers.authorization) {
+      return res.status(401).json({ message: 'LOGIN_REQUIRED' });
+    }
+    if (req.headers.authorization?.split(' ').length !== 2)
       return res
         .status(401)
         .json({ message: 'invalid authorization format [bearer token]' });

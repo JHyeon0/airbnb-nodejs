@@ -5,51 +5,30 @@ const jwt = require('jsonwebtoken');
 const { UserService } = require('../services');
 
 const signUp = async (req, res, next) => {
-  validateId = (id) => {
-    const validIdRegExp = /\w@\w+\.\w/i;
-    return id.match(validIdRegExp) ? true : false;
+  validateEmail = (email) => {
+    const validEmailRegExp = /\w@\w+\.\w/i;
+    return email.match(validEmailRegExp) ? true : false;
   };
 
-  validatePw = (pw, setErrorMsg = true) => {
+  validatePw = (pw) => {
     const pwValidation = {
       regexUppercase: /[A-Z]/g,
       regexLowercase: /[a-z]/g,
       regexSpecialCharacter: /[!|@|#|$|%|^|&|*]/g,
       regexDigit: /[0-9]/g,
     };
-    const errMsgMatch = {
-      regexUppercase: '영어 대문자를',
-      regexLowercase: '영어 소문자를',
-      regexSpecialCharacter: '특수 문자를',
-      regexDigit: '숫자를',
-    };
     const MIN_PW_LENGTH = 8;
     const pwLength = pw.length;
 
-    if (setErrorMsg && !pwLength) {
-      this.setState({ errorMessage: '' });
-      return false;
-    }
+    if (pwLength < MIN_PW_LENGTH) return false;
 
     for (let validType in pwValidation) {
-      if (!pw.match(pwValidation[validType]) && pwLength) {
-        setErrorMsg &&
-          this.setState({
-            errorMessage: `비밀번호는 ${errMsgMatch[validType]} 포함해야 합니다.`,
-          });
-        return;
-        //let h = setErrorMsg? this.setState({errorMessage: `비밀번호는 ${errMsgMatch[validType]} 포함해야 합니다.`,}) : false
+      if (!pw.match(pwValidation[validType])) {
+        return false;
       }
     }
 
-    if (pwLength >= MIN_PW_LENGTH) return true;
-    else {
-      setErrorMsg &&
-        this.setState({
-          errorMessage: pwLength ? '비밀번호는 8자리 이상입니다.' : '',
-        });
-      return false;
-    }
+    return true;
   };
 
   try {
@@ -68,9 +47,14 @@ const signUp = async (req, res, next) => {
         return res.status(400).json({ message: `MISSING ${info}` });
     }
 
+    if (!validateEmail(email))
+      return res.status(400).json({ message: 'INVALID EMAIL' });
+
     const foundUser = await UserService.findUser({ email });
     if (foundUser) return res.status(400).json({ message: 'EXISTING USER' });
 
+    if (!validatePw(password))
+      return res.status(400).json({ message: 'INVALID PASSWORD' });
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const createdUser = await UserService.createUser({
@@ -109,6 +93,7 @@ const logIn = async (req, res, next) => {
     const token = jwt.sign({ id }, AUTH_TOKEN_SALT, {
       expiresIn: `${TOKEN_MAINTAINING_HOURS}h`,
     });
+
     res.status(200).json({ message: 'SUCCESS', token });
   } catch (err) {
     next(err);

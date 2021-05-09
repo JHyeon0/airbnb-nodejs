@@ -2,7 +2,7 @@ const { UserService } = require('../services');
 const { AUTH_TOKEN_SALT } = process.env;
 const jwt = require('jsonwebtoken');
 
-const validateToken = async (req, res, next) => {
+const validateUser = async (req, res, next) => {
   try {
     if (req.headers.authorization.split(' ').length !== 2)
       return res
@@ -30,4 +30,42 @@ const validateToken = async (req, res, next) => {
   }
 };
 
-module.exports = validateToken;
+const validateHost = async (req, res, next) => {
+  try {
+    /* validateUser 로직 겹치는 부분: 시작 */
+    if (req.headers.authorization.split(' ').length !== 2)
+      return res
+        .status(401)
+        .json({ message: 'invalid authorization format [bearer token]' });
+
+    const [bearer, token] = req.headers.authorization.split(' ');
+    const decoded = await jwt.verify(token, AUTH_TOKEN_SALT, (err, decoded) => {
+      if (!decoded) {
+        res.status(401).json(err);
+        return;
+      }
+      return decoded;
+    });
+    if (!decoded) return;
+
+    const foundUser = await UserService.findUser({ id: decoded.id }, ['id']);
+
+    if (!foundUser) return res.status(404).json({ message: 'user not found' });
+    /* validateUser 로직 겹치는 부분: 끝, 함수로 분리하는 방법? */
+
+    foundUser.isHost = await UserService.verifyHost(foundUser.id);
+
+    if (!foundUser.isHost)
+      return res.status(403).json({ message: 'unauthorized host' });
+
+    req.foundUser = foundUser;
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  validateUser,
+  validateHost,
+};

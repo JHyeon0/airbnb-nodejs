@@ -21,7 +21,15 @@ const findUser = (field, selectFieldsArr) => {
   });
 };
 
+const verifyHost = async (userId) => {
+  const isHost = await prisma.$queryRaw(
+    `SELECT id FROM Host WHERE userId=${userId}`,
+  );
+  return isHost[0] ? true : false;
+};
+
 module.exports = {
   findUser,
   createUser,
+  verifyHost,
 };

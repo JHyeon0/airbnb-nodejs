@@ -90,7 +90,10 @@ const logIn = async (req, res, next) => {
     if (!isValidPassword)
       return res.status(400).json({ message: 'client input invalid' });
 
-    const token = jwt.sign({ id }, AUTH_TOKEN_SALT, {
+    const isHost = await UserService.verifyHost(id);
+
+    console.log('isHost in UserController', isHost);
+    const token = jwt.sign({ id, isHost }, AUTH_TOKEN_SALT, {
       expiresIn: `${TOKEN_MAINTAINING_HOURS}h`,
     });
 
@@ -103,7 +106,7 @@ const logIn = async (req, res, next) => {
 const verify = async (req, res, next) => {
   try {
     const foundUser = req.foundUser;
-    res.status(200).json(foundUser);
+    res.status(200).json({ message: 'SUCCESS', id: foundUser.id });
   } catch (err) {
     next(err);
   }

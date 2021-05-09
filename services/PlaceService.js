@@ -1,6 +1,6 @@
 const prisma = require('../prisma'); // Service 로직은 오직 Model(=Prisma) 에만 의존합니다.
 
-const findPlace = (fields) => {
+const findPlaces = (fields) => {
   return prisma.place.findMany({
     where: {
       pricePerDay: { lte: fields.maximumPrice, gte: fields.minimumPrice },
@@ -77,7 +77,7 @@ const updatePlace = (placeId, data) => {
 };
 
 module.exports = {
-  findPlace,
+  findPlaces,
   findOnePlace,
   findOnePlaceDetail,
   updatePlace,

@@ -36,10 +36,7 @@ const findPlaces = async (req, res, next) => {
       };
     });
 
-    return res.status(200).json({
-      message: 'SUCCESS',
-      placeList,
-    });
+    return res.status(200).json({ placeList });
   } catch (err) {
     next(err);
   }
@@ -65,10 +62,7 @@ const findOnePlace = async (req, res, next) => {
 
     const placeInformation = { ...place, host: place.host.user.username };
 
-    return res.status(200).json({
-      message: 'SUCCESS',
-      placeInformation,
-    });
+    return res.status(200).json({ placeInformation });
   } catch (err) {
     next(err);
   }
@@ -87,17 +81,12 @@ const findOnePlaceDetail = async (req, res, next) => {
     const place = await PlaceService.findOnePlaceDetail(placeId);
 
     if (!place) {
-      return res.status(404).json({
-        message: 'PLACE_DOES_NOT_EXIST',
-      });
+      return res.status(404).json({ message: 'PLACE_DOES_NOT_EXIST' });
     }
 
     const placeInformation = { ...place, host: place.host.user.username };
 
-    return res.status(200).json({
-      message: 'SUCCESS',
-      placeInformation,
-    });
+    return res.status(200).json({ placeInformation });
   } catch (err) {
     next(err);
   }
@@ -119,18 +108,11 @@ const updatePlace = async (req, res, next) => {
     if (selectedPlace) {
       if (selectedPlace.host.user.id === req.foundUser.id) {
         const updatedPlace = await PlaceService.updatePlace(placeId, data);
-        return res.status(200).json({
-          message: 'SUCCESS',
-          updatedPlace,
-        });
+        return res.status(200).json({ updatedPlace });
       }
-      return res.status(403).json({
-        message: 'NOT_A_VALID_HOST',
-      });
+      return res.status(403).json({ message: 'NOT_A_VALID_HOST' });
     }
-    return res.status(404).json({
-      message: 'PLACE_DOES_NOT_EXIST',
-    });
+    return res.status(404).json({ message: 'PLACE_DOES_NOT_EXIST' });
   } catch (err) {
     next(err);
   }

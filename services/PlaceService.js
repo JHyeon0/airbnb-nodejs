@@ -25,6 +25,50 @@ const findPlace = (fields) => {
   });
 };
 
+const findOnePlace = (placeId) => {
+  return prisma.place.findUnique({
+    where: {
+      id: placeId,
+    },
+    select: {
+      id: true,
+      title: true,
+      beds: true,
+      bathrooms: true,
+      conveniences: true,
+      pricePerDay: true,
+      maximumGuests: true,
+      locationLogitude: true,
+      locationLatitude: true,
+      rules: true,
+      host: {
+        select: {
+          user: { select: { username: true } },
+        },
+      },
+      placeImage: { select: { id: true, imageUrl: true } },
+    },
+  });
+};
+
+const findOnePlaceDetail = (placeId) => {
+  return prisma.place.findUnique({
+    where: {
+      id: placeId,
+    },
+    include: {
+      host: {
+        select: {
+          user: { select: { username: true } },
+        },
+      },
+      placeImage: { select: { id: true, imageUrl: true } },
+    },
+  });
+};
+
 module.exports = {
   findPlace,
+  findOnePlace,
+  findOnePlaceDetail,
 };

@@ -22,10 +22,10 @@ const findUser = (field, selectFieldsArr) => {
 };
 
 const verifyHost = async (userId) => {
-  const isHost = await prisma.$queryRaw(
+  const hostId = await prisma.$queryRaw(
     `SELECT id FROM Host WHERE userId=${userId}`,
   );
-  return isHost[0] ? true : false;
+  return hostId[0] ? hostId[0].id : null;
 };
 
 module.exports = {

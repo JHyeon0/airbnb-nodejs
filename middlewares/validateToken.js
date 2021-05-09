@@ -53,9 +53,9 @@ const validateHost = async (req, res, next) => {
     if (!foundUser) return res.status(404).json({ message: 'user not found' });
     /* validateUser 로직 겹치는 부분: 끝, 함수로 분리하는 방법? */
 
-    foundUser.isHost = await UserService.verifyHost(foundUser.id);
+    foundUser.hostId = await UserService.verifyHost(foundUser.id);
 
-    if (!foundUser.isHost)
+    if (!foundUser.hostId)
       return res.status(403).json({ message: 'unauthorized host' });
 
     req.foundUser = foundUser;

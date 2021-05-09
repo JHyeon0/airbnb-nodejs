@@ -3,7 +3,9 @@ const { ReservationService } = require('../services');
 
 const makeReservation = async (req, res, next) => {
   try {
+    const { id: guestId } = req.foundUser;
     const fields = req.body;
+    fields.guestId = guestId;
     const newReservation = await ReservationService.makeReservation(fields);
 
     res.status(200).json({

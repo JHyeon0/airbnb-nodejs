@@ -25,7 +25,7 @@ const verifyHost = async (userId) => {
   const hostId = await prisma.$queryRaw(
     `SELECT id FROM Host WHERE userId=${userId}`,
   );
-  return hostId[0] ? hostId[0].id : null;
+  return hostId[0] ? hostId[0].id : false;
 };
 
 module.exports = {

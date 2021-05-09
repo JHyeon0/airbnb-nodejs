@@ -3,8 +3,10 @@ const router = express.Router();
 const middlewares = require('../middlewares');
 
 const { ReservationController } = require('../controllers');
+const { validateHost } = require('../middlewares');
 // Route 는 오직 Controller 에만 의존 합니다.
 
+router.get('/host', [validateHost], ReservationController.getHostReservations);
 router.post(
   '',
   [middlewares.validateUser],

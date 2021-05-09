@@ -2,6 +2,7 @@ const { UserService } = require('../services');
 const { AUTH_TOKEN_SALT } = process.env;
 const jwt = require('jsonwebtoken');
 
+// req.foundUser = { id: number } 생성
 const validateUser = async (req, res, next) => {
   try {
     if (!req.headers.authorization) {
@@ -33,10 +34,11 @@ const validateUser = async (req, res, next) => {
   }
 };
 
+// req.foundUser = { id: number , isHost: boolean } 생성
 const validateHost = async (req, res, next) => {
   try {
     /* validateUser 로직 겹치는 부분: 시작 */
-    if (req.headers.authorization.split(' ').length !== 2)
+    if (req.headers.authorization?.split(' ').length !== 2)
       return res
         .status(401)
         .json({ message: 'invalid authorization format [bearer token]' });

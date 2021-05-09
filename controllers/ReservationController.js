@@ -17,6 +17,20 @@ const makeReservation = async (req, res, next) => {
   }
 };
 
+const getHostReservations = async (req, res, next) => {
+  try {
+    console.log(req.foundUser.hostId);
+    const hostReservations = await ReservationService.getHostReservations(
+      req.foundUser.hostId,
+    );
+
+    res.status(200).json({ message: 'SUCCESS', hostReservations });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   makeReservation,
+  getHostReservations,
 };

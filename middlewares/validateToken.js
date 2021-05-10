@@ -23,7 +23,7 @@ const validateUser = async (req, res, next) => {
     });
     if (!decoded) return;
 
-    const foundUser = await UserService.findUser({ id: decoded.id });
+    const foundUser = await UserService.findUser({ id: decoded.id }, ['id']);
 
     if (!foundUser) return res.status(404).json({ message: 'user not found' });
 
